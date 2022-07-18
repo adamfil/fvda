@@ -26,7 +26,6 @@ from climatological_averager import climatological_averager
 ## new import 
 import json
 import math 
-import ssl
 
 theme = [dbc.themes.SIMPLEX]
 
@@ -239,7 +238,7 @@ html.Div([
     html.Div([
         html.H4(children='Welcome to Forecast Validator!'),
         
-        html.P('Fill out the Validation Parameter Inputs to get tailored forecast performance metrics. Your skill scores can be exported as CSV for further analysis, and our Key Insights provide a summary of your validation.'),
+        html.P('Fill out the Validation Parameter Inputs to get tailored forecast performance metrics.'),
         html.H2('Validation Parameter Input'),
     ]),
 
@@ -346,6 +345,10 @@ html.Div([
     html.Button(id='button', n_clicks=0, children='Run validation', style={"font-size": "16px", "padding": "6px 16px", "border-radius": "8px"}),
 
     html.Button(id="cancel_button_id", children='Cancel validation', style={"font-size": "16px", "padding": "6px 16px", "border-radius": "8px"}),
+
+    html.Div(
+    id='error',
+    children=""),
 
     dbc.Container(dbc.Row(dbc.Col(id='fs_spinner', children=None))),
 
@@ -692,6 +695,7 @@ def update_valid_datasets(forecast):
     [
         Output(component_id='text', component_property='children'),
         Output('memory', 'data'),
+        Output('error', 'children')
     ],
 
     [
@@ -719,29 +723,38 @@ def update(n_clicks, forecast, dataset, latlong, map, end_date, forecast_date_ra
 
         #determine lat/long input 
         #to do: generate unrounded int list
-        latlongz = [[latlong[0], latlong[1]]]
-        if type(map) == list:
-            latlongz = []
-            for i in range(len(map)):
-                latlongz.append([map[i]['props']['position'][0], map[i]['props']['position'][1]])
-        #to do2: generate rounded string list
-        latlongz_rounded = [] 
-        for pair in latlongz:
-            latlongz_rounded.append(
-                [np.round(pair[0],3), np.round(pair[1],3)]
-            )
-        print(latlongz)
+        try:
+            latlongz = [[latlong[0], latlong[1]]]
+            if type(map) == list:
+                latlongz = []
+                for i in range(len(map)):
+                    latlongz.append([map[i]['props']['position'][0], map[i]['props']['position'][1]])
+            #to do2: generate rounded string list
+            latlongz_rounded = [] 
+            for pair in latlongz:
+                latlongz_rounded.append(
+                    [np.round(pair[0],3), np.round(pair[1],3)]
+                )
+        except:
+            return ["The results of your validation will appear here.", None, "There was a problem with your location selection. Ensure you have selected a valid location."]
 
-        datez_list = [] 
-        startdt = datetime.datetime.strptime(forecast_date_range_start, '%Y-%m-%d')
-        enddt = datetime.datetime.strptime(forecast_date_range_end, '%Y-%m-%d')
-        delta = enddt - startdt   # returns timedelta
+        try:
+            datez_list = [] 
+            startdt = datetime.datetime.strptime(forecast_date_range_start, '%Y-%m-%d')
+            enddt = datetime.datetime.strptime(forecast_date_range_end, '%Y-%m-%d')
+            delta = enddt - startdt   # returns timedelta
 
-        for i in range(delta.days + 1):
-            day = startdt + datetime.timedelta(days=i)
-            datez_list.append(str(day)[0:10])
+            for i in range(delta.days + 1):
+                day = startdt + datetime.timedelta(days=i)
+                datez_list.append(str(day)[0:10])
+        except: 
+            # return date error
+            return ["The results of your validation will appear here.", None, "There was a problem with your date range selection. Ensure you have selected a valid range of forecast start dates."]
 
-        query = ValidationQuery(datez_list, latlongz, forecast, dataset, length_limit=end_date)
+        try:
+            query = ValidationQuery(datez_list, latlongz, forecast, dataset, length_limit=end_date)
+        except: 
+            return ["The results of your validation will appear here.", None, "There was a problem calculating your forecast validation skillscores. Ensure you have selected a valid location and date range for your forecasts and dataset."]
         metrics = {}
         for key in query.identifiers.keys():
             metrics[key] = query.identifiers[key]['metrics']
@@ -798,9 +811,9 @@ def update(n_clicks, forecast, dataset, latlong, map, end_date, forecast_date_ra
         print(metrics)
         data = json.dumps(metrics) 
 
-        return [dash_table.DataTable(dt_list, export_format="csv",page_size=50, style_table={'max-height': '300px', 'overflowY': 'auto'}), data]
+        return [dash_table.DataTable(dt_list, export_format="csv",page_size=50, style_table={'max-height': '300px', 'overflowY': 'auto'}), data, ""]
     else:
-        return ["The results of your validation will appear here.", None]
+        return ["The results of your validation will appear here.", None, ""]
 
 @app.callback([Output("layer", "children"), Output("location", "children")], [Input("map", "click_lat_lng"), Input("layer", "children"), Input("clear_markers", "n_clicks"), Input("map", "dbl_click_lat_lng")])
 def map_click(click_lat_lng, current, n_clicks, dbl_click_lat_lng):
