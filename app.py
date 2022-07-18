@@ -34,12 +34,12 @@ celery_app = Celery(
     __name__,
     broker = "rediss://:pfd1c23f2b9201f4a0869041e17955284914f0135bbc7eaeb86b2aceb57556c3c@ec2-44-208-193-34.compute-1.amazonaws.com:19130/0?ssl_cert_reqs=CERT_NONE",
     backend = "rediss://:pfd1c23f2b9201f4a0869041e17955284914f0135bbc7eaeb86b2aceb57556c3c@ec2-44-208-193-34.compute-1.amazonaws.com:19130/1?ssl_cert_reqs=CERT_NONE",
-         broker_use_ssl = {
-        'ssl_cert_reqs': ssl.CERT_NONE
-     },
-     redis_backend_use_ssl = {
-        'ssl_cert_reqs': ssl.CERT_NONE
-     }
+    #     broker_use_ssl = {
+    #    'ssl_cert_reqs': ssl.CERT_NONE
+    # },
+    # redis_backend_use_ssl = {
+    #    'ssl_cert_reqs': ssl.CERT_NONE
+    # }
     #broker="redis://localhost:6379/0", backend="redis://localhost:6379/1"
 )
 long_callback_manager = CeleryLongCallbackManager(celery_app)
