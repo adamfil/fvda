@@ -255,13 +255,13 @@ html.Div([
             id='forecast',
             options=[
                 {'label': 'Climatological Averager', 'value': 'climatological_averager'},
-                {'label': 'Global Forecast System 10m East/West Wind', 'value': 'gfs_10m_wind_u-hourly'},
-                {'label': 'Global Forecast System 10m North/South Wind', 'value': 'gfs_10m_wind_v-hourly'},
+                #{'label': 'Global Forecast System 10m East/West Wind', 'value': 'gfs_10m_wind_u-hourly'},
+                #{'label': 'Global Forecast System 10m North/South Wind', 'value': 'gfs_10m_wind_v-hourly'},
                 {'label': 'Global Forecast System Maximum Temperature', 'value': 'gfs_tmax-hourly'},
-                {'label': 'Global Forecast System Minimum Temperature',  'value': 'gfs_tmin-hourly'},
+                #{'label': 'Global Forecast System Minimum Temperature',  'value': 'gfs_tmin-hourly'},
                 {'label': 'European Centre for Medium-Range Weather Forecasts 2m Temperature', 'value': 'ecmwf_forecasts_temp2m-three_hourly'},
-                {'label': 'European Centre for Medium-Range Weather Forecasts 10m East/West Wind', 'value': 'ecmwf_forecasts_windu10m-three_hourly'},
-                {'label': 'European Centre for Medium-Range Weather Forecasts 10m North/South Wind', 'value': 'ecmwf_forecasts_windv10m-three_hourly'}                
+                #{'label': 'European Centre for Medium-Range Weather Forecasts 10m East/West Wind', 'value': 'ecmwf_forecasts_windu10m-three_hourly'},
+                #{'label': 'European Centre for Medium-Range Weather Forecasts 10m North/South Wind', 'value': 'ecmwf_forecasts_windv10m-three_hourly'}                
                 #{'label': 'Global Forecast System 10m Full Vector Wind', 'value': 'gfs_10m_wind_full_vector-hourly'},
                     ],
     placeholder='Select a forecast to validate',
