@@ -9,8 +9,7 @@ from datetime import datetime, timedelta
 
 MY_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjI1MzQwMjMwMDc5OSwiaWF0IjoxNjMwNTMwMTgwLCJzdWIiOiJhMDIzYjUwYi0wOGQ2LTQwY2QtODNiMS1iMTExZDA2Mzk1MmEifQ.qHy4B0GK22CkYOTO8gsxh0YzE8oLMMa6My8TvhwhxMk'
 #define all forecasts which can be validated
-VALID_FORECASTS = ['climatological_averager', 'gfs_10m_wind_u-hourly', 'gfs_10m_wind_v-hourly', 'gfs_tmax-hourly', 'gfs_tmin-hourly', 
-'ecmwf_forecasts_temp2m-three_hourly', 'ecmwf_forecasts_windu10m-three_hourly', 'ecmwf_forecasts_windv10m-three_hourly']
+VALID_FORECASTS = ['climatological_averager', 'gfs_tmax-hourly', 'ecmwf_forecasts_temp2m-three_hourly']
 
 #for each valid forecast, define which metrics will be measured
 METRICS_PER_FORECAST = {'climatological_averager': ['rmse', 'mae', 'bias'], 
